@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -9,7 +9,12 @@ class PostController extends Controller
 
     public function index()
     {
-        return view('posts.index');
+
+
+
+       $posts = Post::all();
+
+       return view('posts.index')->with('posts', $posts );
     }
 
 
@@ -25,9 +30,12 @@ class PostController extends Controller
     }
 
 
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        return view('posts.show')->with([
+        'post' => $post,
+        'recent_posts' =>Post::latest()->take(5)->get()->except($post->id)
+    ]);
     }
 
 
