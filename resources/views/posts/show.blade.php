@@ -9,8 +9,25 @@
 <!-- Detail Start -->
 <div class="container-fluid py-5">
     <div class="container">
+
         <div class="row">
             <div class="col-lg-8">
+                <div class="row mb-4">
+                    <a class="btn btn-sm btn-outline-dark mr-2"
+                     href="{{ route('posts.edit',['post'=> $post->id ]) }}">
+                        Ozgartirish
+                    </a>
+                    <form action="{{ route('posts.destroy',['post'=> $post->id]) }}"
+                        method="POST"
+                        onsubmit="return confirm('Rostanham ochirishni hohlaysizmio')"
+                        >
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            O`chirish
+                        </button>
+                    </form>
+                </div>
                 <div class="mb-5">
                     <div class="d-flex mb-2">
                         <a class="text-secondary text-uppercase font-weight-medium" href="">Admin</a>
@@ -23,7 +40,7 @@
                 </div>
 
                 <div class="mb-5">
-                    <img class="img-fluid rounded w-100 mb-4" src="/img/carousel-1.jpg" alt="Image">
+                    <img class="img-fluid rounded w-100 mb-4" src="{{asset('storage/'. $post->photo) }}" alt="Image">
                     <p>{{ $post->content }}</p>
 
 
@@ -123,7 +140,7 @@
 
 
                     <div class="d-flex align-items-center border-bottom mb-3 pb-3">
-                        <img class="img-fluid rounded" src="/img/blog-1.jpg" style="width: 80px; height: 80px; object-fit: cover;" alt="">
+                        <img class="img-fluid rounded" src="{{asset('storage/'. $post->photo) }}" style="width: 80px; height: 80px; object-fit: cover;" alt="">
                         <div class="d-flex flex-column pl-3">
                             <a class="text-dark mb-2" href="">{{ $post->title }}</a>
                             <div class="d-flex">
