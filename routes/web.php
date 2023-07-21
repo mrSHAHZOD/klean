@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,11 @@ Route::get('/projects',[PageController::class,'projects'])->name('projects');
 Route::get('/contact',[PageController::class,'contact'])->name('contact');
 
 
-Route::resource('posts', PostController::class);
+Route::resources([
+    'posts'=> PostController::class,
+    'comments' => CommentController::class,
+]);
+
 
 
 /* Route::get('posts',PostController::class,'index')->name('posts.index');

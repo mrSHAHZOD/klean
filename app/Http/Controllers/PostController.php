@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
@@ -50,7 +51,7 @@ class PostController extends Controller
     {
         return view('posts.show')->with([
         'post' => $post,
-        'recent_posts' =>Post::latest()->take(5)->get()->except($post->id)
+        'recent_posts' =>Post::latest()->take(5)->get()->except($post->id)->take(5)
     ]);
     }
 
