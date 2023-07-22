@@ -21,6 +21,24 @@
                           <p class="help-block text-danger">{{ $message }}</p>
                         @enderror
                     </div>
+
+                    <div class="control-group mb-4">
+                        <select name="category_id">
+                            @foreach ($categories as $category )
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="control-group mb-4">
+                            <label>Tags</label>
+                        <select name="tags[]" multiple>
+                      
+                            @foreach ($tags as $tag )
+                            <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                       <div class="control-group">
                             <input type="file" name="photo" class="form-control p-4" id="subject" placeholder="Rasim"/>
                             <p class="help-block text-danger"></p>
