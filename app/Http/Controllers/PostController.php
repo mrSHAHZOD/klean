@@ -11,11 +11,12 @@ use Illuminate\Support\Facades\Storage;
 class PostController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index','show']);
+    }
     public function index()
     {
-
-
-
        $posts = Post::latest()->paginate(6);
 
        return view('posts.index')->with('posts', $posts );
@@ -40,7 +41,7 @@ class PostController extends Controller
         }
 
        $post = Post::create([
-            'user_id'=> 1,
+            'user_id'=> auth()->user()->id,
             'category_id' => $request->category_id,
             'title' => $request->title,
             'short_content' => $request->short_content,
