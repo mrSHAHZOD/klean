@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-lg-8">
                     @auth
-
+                    @canany(['update',  'delete'], $post)
 
                     <div class="row mb-4">
                         <a class="btn btn-sm btn-outline-dark mr-2"
@@ -28,7 +28,9 @@
                                 O`chirish
                             </button>
                         </form>
+
                     </div>
+                    @endcanany
                     @endauth
                     <div class="mb-5">
                         <div class="d-flex mb-2">

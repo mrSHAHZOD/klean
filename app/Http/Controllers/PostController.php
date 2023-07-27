@@ -5,16 +5,20 @@ use App\Models\Post;
 use App\Models\Comment;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Events\PostCreated;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
 class PostController extends Controller
 {
 
     public function __construct()
     {
         $this->middleware('auth')->except(['index','show']);
+        $this->authorizeResource(Post::class, 'post');
     }
+
     public function index()
     {
        $posts = Post::latest()->paginate(6);
@@ -55,6 +59,8 @@ class PostController extends Controller
         }
     }
 
+    PostCreated::dispatch($post);
+
        return redirect()->route('posts.index');
     }
 
@@ -73,12 +79,18 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
+
+        // Gate::authorize('update', $post);
+
+
         return view('posts.edit')->with(['post'=> $post]);
     }
 
 
     public function update(StorePostRequest $request, Post $post)
     {
+        //  Gate::authorize('update', $post);
+
         if($request->hasFile('photo')){
             if(isset($post->photo)){
                 Storage::delete($post->photo);
