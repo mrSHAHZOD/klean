@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Gate;
+use App\Jobs\ChangePost;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailPostCreated;
 class PostController extends Controller
 {
 
@@ -60,6 +63,11 @@ class PostController extends Controller
     }
 
     PostCreated::dispatch($post);
+
+
+    ChangePost::dispatch($post)->onQueue('uploading');
+
+    Mail::to($request->user())->later(now()->addMilliseconds(15),(new MailPostCreated($post)->onQueu('sending-mails')));
 
        return redirect()->route('posts.index');
     }
