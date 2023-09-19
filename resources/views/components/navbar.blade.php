@@ -6,19 +6,38 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+        {{-- {{ dump($current_locale) }} --}}
         <div class="navbar-nav mr-auto py-0">
-            <a href="/" class="nav-item nav-link active">Bosh sahifa</a>
-            <a href="{{ route('about') }}" class="nav-item nav-link">Biz Haqmizda</a>
-            <a href="{{ route('services') }}" class="nav-item nav-link">xizmatlar</a>
-            <a href="{{ route('projects') }}" class="nav-item nav-link">Partfolio</a>
-            <a href="{{ route('posts.index') }}" class="nav-item nav-link">Blog</a>
+            <a href="/" class="nav-item nav-link active">{{ __('Bosh sahifa') }}</a>
+            <a href="{{ route('about') }}" class="nav-item nav-link">{{ __('Biz haqimizda') }}</a>
+            <a href="{{ route('services') }}" class="nav-item nav-link">{{ __('Xizmatlar') }}</a>
+            <a href="{{ route('projects') }}" class="nav-item nav-link">{{ __('Partfolio') }}</a>
+            <a href="{{ route('posts.index') }}" class="nav-item nav-link">{{ __('Blog') }}</a>
 
-            <a href="{{ route('contact') }}" class="nav-item nav-link">Aloqa</a>
+            <a href="{{ route('contact') }}" class="nav-item nav-link">{{ __('Aloqa') }}</a>
         </div>
+        @foreach ($all_locale as $locale)
+        <a href="{{ route('locale.change', ['locale'=> $locale ]) }}" class="btn btn-primary mr-3 d-none d-lg-block">
+        {{ $locale }}
+        </a>
+        @endforeach
+
         @auth
-        <div>
-            {{ auth()->user()->name }}
-        </div>
+            <a href="{{ route('notifications.index') }}" class="btn btn-primary mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                </svg>
+                <span class="badge badge-light">{{ auth()->user()->notifications()->count() }}</span>
+                <span class="sr-only">unread message</span>
+            </a>
+
+
+
+            <div>
+                {{ auth()->user()->name }}
+            </div>
             <a href="{{ route('posts.create') }}" class="btn btn-primary mr-3 d-none d-lg-block">Post yaratish</a>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
@@ -28,5 +47,6 @@
             <a href="{{ route('login') }}" class="btn btn-primary mr-3 d-none d-lg-block">kirish</a>
 
         @endauth
+
     </div>
 </nav>

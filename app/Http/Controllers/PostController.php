@@ -13,20 +13,29 @@ use Illuminate\Support\Facades\Gate;
 use App\Jobs\ChangePost;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailPostCreated;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\PostDeleted;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 class PostController extends Controller
 {
 
     public function __construct()
     {
         $this->middleware('auth')->except(['index','show']);
-        $this->authorizeResource(Post::class, 'post');
+      //   $this->authorizeResource(Post::class, 'post');
     }
 
     public function index()
-    {
-       $posts = Post::latest()->paginate(6);
+    {/*
+       $posts = Cache::remember('posts', now()->addSeconds(120), function () {
+        return Post::latest()->get();
+       });
 
        return view('posts.index')->with('posts', $posts );
+ */
+       return Post::limit(10)->get();
     }
 
 
@@ -67,9 +76,12 @@ class PostController extends Controller
 
     ChangePost::dispatch($post)->onQueue('uploading');
 
-    Mail::to($request->user())->later(now()->addMilliseconds(15),(new MailPostCreated($post)->onQueu('sending-mails')));
+    Mail::to($request->user())->later(now()->addMilliseconds(15),(new MailPostCreated($post))/* ->onQueu('sending-mails') */);
 
-       return redirect()->route('posts.index');
+
+    Notification::send(auth()->user(), new PostDeleted($post));
+
+       return redirect()->route('posts.index')->with('status', 'succeess');
     }
 
 

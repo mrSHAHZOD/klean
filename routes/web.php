@@ -5,6 +5,8 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\LanguageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,11 +31,23 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('register',[AuthController::class, 'register'])->name('register');
 Route::post('register',[AuthController::class, 'register_store'])->name('register.store');
 
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('notifications/{notification}/read',[NotificationController::class, 'read'])->name('notifications');
+});
+
+
+
+
+Route::get('language/{locale}', [LanguageController::class, 'change_locale'])->name('locale.change');
+
 
 Route::resources([
     'posts'=> PostController::class,
     'comments' => CommentController::class,
+    'notifications'=> NotificationController::class,
 ]);
+
+
 
 
 

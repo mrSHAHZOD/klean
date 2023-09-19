@@ -51,6 +51,7 @@ class AuthController extends Controller
         //  dd($validated);
         $user = User::create($validated);
 
+        $user->roles()->attach(3);
         auth()->login($user);
 
         return redirect('/')->with('success', "Account successfully registered.");
